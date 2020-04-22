@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <header>
+    <h1>Welcome to your page</h1>
+    </header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!--<script src="/app.js"></script>-->
+<link href="css/style-START.css" rel="stylesheet" type="text/css" media="all" >
+
+</head>
+  <body>
+    <nav id="main">
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/upload.html">Upload</a></li>
+          <li><a href="/youtube.html">Youtube</a></li>
+          <li><a href="#">Articles</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </nav>
+
+    
+		<h2>Upload Files to S3</h2>
+	
+    <iframe name="hiddenFrame" width="0" height="0" style="display: none;"></iframe>
+    <form method="POST" id="uploadForm" name="uploadForm" enctype="multipart/form-data" action="https://race0s0jbd.execute-api.us-east-2.amazonaws.com/latest/upload" target="hiddenframe">
+	  <h2>File Upload</h2>
+	  <div class="form-group">
+	    <input type="file" id="fileinput" name="fileinput">
+        <label for="fileinput">Please select a file</label>
+	  </div>
+      <input type="submit" value="Upload">
+    </form>
+	
+	<!--<form method="GET" action="https://race0s0jbd.execute-api.us-east-2.amazonaws.com/latest/download">
+	<input type="submit" value="Display">	
+	
+	</form>-->
+	
+	<button value="Display" onclick="displayClick()">Display</button>
+	<table class="table">
+	  <thead>
+		<tr>
+			<th scope="col">File Name</th>
+			<th scope="col">Size</th>
+		</tr>
+	  </thead>
+	  <tbody id="tablebody"></tbody>
+	</table>
+
+	
+    <script>
+    $(document).ready(function() {
+        //$('#uploadForm').submit(uploadFile);
+        //event.preventDefault();
+        /*
+        function uploadFile() {
+            event.preventDefault();
+            var file = $("#fileinput").prop('files')[0];
+            //var form = $('form')[0];
+            var fData = new FormData(); 
+            fData.append('file', file);
+
+            $.ajax({
+                crossDomain: true,
+                method: 'POST',
+                cache: false,
+                enctype: 'multipart/form-data',
+                url: 'https://race0s0jbd.execute-api.us-east-2.amazonaws.com/latest/upload',
+                data: file,
+                contentType: false,
+                processData: false,
+                timeout: 600000,
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        }*/
+        
+        
+
+    });
+    function displayClick() {
+        //event.preventDefault();
+        $('#tablebody').children().remove();
+        $('#tablebody').append($(
+            '<tr>' +
+            '<td>'+ '</td>' +
+            '<td>' + '</td>' +
+            '</tr>'
+        ));
+
+        $.ajax({
+            crossDomain: true,
+            type: 'GET',
+            cache: false,
+            url: 'https://race0s0jbd.execute-api.us-east-2.amazonaws.com/latest/download',
+            success: function(data) {
+                for(var i = 0; i < data.length; i++) {
+                    $('#tablebody').append($(
+                        '<tr>' +
+                        '<td>'+ data[i].Key + '</td>' +
+                        '<td>' + data[i].Size+'</td>' +
+                        '</tr>'
+                    ));
+                }
+                
+            }
+        });
+            
+    }
+	
+	
+    </script>
+  </body>
+</html>
